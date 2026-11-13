@@ -3,7 +3,7 @@ systems.
 
 The documentation how to decode it can be found in the kernel
 documentation in Documentation/admin-guide/sysrq.rst.
-Or if prefer online documentation:
+Or if you prefer read online documentation:
 https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
 
 I wrote the program in haskell to practice a bit, but the main reason is
