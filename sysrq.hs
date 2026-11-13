@@ -88,13 +88,6 @@ decodeSysRq''' sysrq
 values :: [(Int, String)] -> [String]
 values = map snd
 
--- keys :: [Assoc] -> [Int]
--- keys = map fst
-
--- -- logarithm base 2, rounded down to the nearest integer.
--- lg2 :: Int -> Int
--- lg2 n = finiteBitSize n - countLeadingZeros n - 1
-
 -- A type to manage errors when parsing the command line
 -- and when reading the file sysrq.
 data ProgError = NotAnInt String
