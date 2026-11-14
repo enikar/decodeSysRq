@@ -83,3 +83,15 @@ decodeSysRq sysrq
                  ,sysrq .&. key /= 0
                  ]
 ```
+I named the power of two, `key`, and the string which describe
+authorization `auth`. We filter the pair `(key, auth)` retaining only
+pairs for which `sysrq .&. key` is different from zero (well, we could
+test if is equal to 1). The operator `.&.` is the bit wise **and** in
+Haskell. Finally, we just build a list of `auth`s.
+
+The values function is just:
+```haskell
+values :: [(Int, String)] -> [String]
+values = map snd
+```
+That is, we are keeping the second element of each pair.
