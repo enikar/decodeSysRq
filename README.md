@@ -1,25 +1,25 @@
-A little toy to decode the value of "/proc/sys/kernel/sysrq" on linux
-systems.
+A little toy to decode the value of the file **/proc/sys/kernel/sysrq**
+on linux systems.
 
 
 The documentation how to decode it can be found in the kernel
-documentation in Documentation/admin-guide/sysrq.rst.
+documentation in **Documentation/admin-guide/sysrq.rst**.
 Or if you prefer read online documentation:
-https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html
+<https://www.kernel.org/doc/html/latest/admin-guide/sysrq.html>
 
 
-I wrote the program in haskell to practice a bit, but the main reason is
-I love haskell despite of it's often difficult to me to think in
-haskell.
+I wrote the program in Haskell to practice a bit, but the main reason is
+I love Haskell despite of it's often difficult to me to think in
+Haskell.
 
 
-I wrote it as a real program with minumum dependencies (just base and
-directory packages are needed). Maybe at some point I'll choose to use
-optparse-applicative to manage the command line arguments.
+I wrote it as a real program with minimum dependencies (just **base** and
+**directory** packages are needed). Maybe at some point I'll choose to use
+**optparse-applicative** to manage the command line arguments.
 
 
 The code is essentially a wrapper around the `decodeSysRq` function.
-As describe in kernel documentation the value in the sysrq file is a bit
+As describe in kernel documentation the value in the **sysrq** file is a bit
 field. The information is coded with 9 bits. The meaning is as follow:
 
 - `sysrq = 0`, deactivate all SysRq commands
@@ -42,10 +42,10 @@ documentation:
 
 
 Well, my first idea was to get a binary representation of `sysrq` value.
-Then I thought it is useless. I just need to subtract the greater from
-the table above. Hence I used a foldr. I can stop thinking in term of
-fold… at some point maybe I need to begin a therapy coding more in
-imperative language… </joke>. I let this code in the `decodeSysRq'''`
+Then I thought it is useless. I just need to subtract the greater value
+from the table above. Hence I used a foldr. I can stop thinking in term
+of fold… at some point maybe I need to begin a therapy coding more in
+imperative language… `</joke>`. I let this code in the `decodeSysRq'''`
 function.
 
 
