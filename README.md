@@ -30,15 +30,14 @@ For other value it's a bit more complex. It depends on value of bits
 from 1 to 8, they are described with power of two, from kernel
 documentation:
 
-|-------------|:-----------------------------------------------------:|
-| 2 =   0x2   |        enable control of console logging level        |
-| 4 =   0x4   |        enable control of keyboard (SAK, unraw)        |
-| 8 =   0x8   |       enable debugging dumps of processes etc.        |
-| 16 =  0x10  |                  enable sync command                  |
-| 32 =  0x20  |               enable remount read-only                |
-| 64 =  0x40  | enable signalling of processes (term, kill, oom-kill) |
-| 128 =  0x80 |                 allow reboot/poweroff                 |
-| 256 = 0x100 |             allow nicing of all RT tasks              |
+- 2   =   0x2   enable control of console logging level
+- 4   =   0x4   enable control of keyboard (SAK, unraw)
+- 8   =   0x8   enable debugging dumps of processes etc.
+- 16  =  0x10   enable sync command
+- 32  =  0x20   enable remount read-only
+- 64  =  0x40   enable signalling of processes (term, kill, oom-kill)
+- 128 =  0x80   allow reboot/poweroff
+- 256 = 0x100   allow nicing of all RT tasks
 
 
 Well, my first idea was to get a binary representation of `sysrq` value.
