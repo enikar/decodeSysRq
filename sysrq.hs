@@ -6,6 +6,7 @@ import System.Directory (doesFileExist)
 import Text.Read (readMaybe)
 import Data.Foldable (traverse_)
 import Data.Bits ((.&.))
+import Data.Bool (bool)
 import Control.Monad (guard)
 
 -- A type to manage the different behaviours of our program.
@@ -121,14 +122,21 @@ initProg = do
 sysRqFile  :: String
 sysRqFile = "/proc/sys/kernel/sysrq"
 
+-- readSysRq :: IO (Either ProgError Action)
+-- readSysRq = do
+--   exists <- doesFileExist sysRqFile
+--   if exists
+--   then do
+--        datas <- readFile' sysRqFile
+--        pure (readInt datas)
+--   else pure (Left (FileNotFound sysRqFile)) -- signal the file was not found.
+
+-- A rewrite of readSysRq, it's better imho.
 readSysRq :: IO (Either ProgError Action)
-readSysRq = do
-  exists <- doesFileExist sysRqFile
-  if exists
-  then do
-       datas <- readFile' sysRqFile
-       pure (readInt datas)
-  else pure (Left (FileNotFound sysRqFile)) -- signal the file was not found.
+readSysRq = doesFileExist sysRqFile >>= bool notFound readData
+  where
+    notFound = pure (Left (FileNotFound sysRqFile))
+    readData = readInt <$> readFile' sysRqFile
 
 readInt :: String -> Either ProgError Action
 readInt s = maybe (Left (NotAnInt s)) -- signal that s doesn't match an Int.
