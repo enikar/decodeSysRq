@@ -26,7 +26,7 @@ field. The information is coded with 9 bits. The meaning is as follow:
 
 
 For other value it's a bit more complex. It depends on value of bits
-from 1 to 8, they are described with power of two, from kernel
+from 1 to 8, they are described as power of two, from kernel
 documentation:
 | power of 2  |             What SysRq commands are allow             |
 |-------------|:-----------------------------------------------------:|
@@ -41,11 +41,13 @@ documentation:
 
 
 Well, my first idea was to get a binary representation of `sysrq` value.
-Then I thought it is useless. I just need to subtract the greater value
-from the table above. Hence I used a foldr. I can stop thinking in term
-of fold… at some point maybe I need to begin a therapy coding more in
-imperative language… `</joke>`. I let this code in the `decodeSysRq'''`
-function.
+Then I thought it is useless. I just need to try subtract successively
+value from the table above beginning with greater one. So I began with
+`256`, if `sysrq >= 256`, I subtracted `256` from `sysrq`, add which is
+allowed to a list of authorizations. Then continue with `128` and so on.
+Hence I used a `foldr`. I can't stop thinking in term of fold… at some
+point maybe I need to begin a therapy coding more in imperative
+language… `</joke>`. I let this code in the `decodeSysRq'''` function.
 
 
 At the end, I realized there even was a simpler way to get the value
