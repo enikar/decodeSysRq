@@ -9,8 +9,7 @@ Or if you prefer read online documentation:
 
 
 I wrote the program in Haskell to practice a bit, but the main reason is
-I love Haskell despite of it's often difficult to me to think in
-Haskell.
+I love Haskell despite of I feel difficult to think in Haskell.
 
 
 I wrote it as a real program with minimum dependencies (just **base** and
