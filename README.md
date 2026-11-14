@@ -85,9 +85,9 @@ decodeSysRq sysrq
 ```
 I named the power of two, `key`, and the string which describe
 authorization `auth`. We filter the pair `(key, auth)` retaining only
-pairs for which `sysrq .&. key` is different from zero (well, we could
-test if is equal to 1). The operator `.&.` is the bit wise **and** in
-Haskell. Finally, we just build a list of `auth`s.
+pairs for which `sysrq .&. key` is different from zero. The operator
+`.&.` is the bit wise **and** in Haskell. Finally, we just build a list
+of `auth`s.
 
 The values function is just:
 ```haskell
