@@ -51,7 +51,7 @@ language… `</joke>`. I let this code in the `decodeSysRq'''` function.
 
 
 At the end, I realized there even was a simpler way to get the value
-of individual bit. From beginning, I put the above table in an
+of individual bit. From the beginning, I put the above table in an
 associative list:
 
 
@@ -72,4 +72,14 @@ authorizations =
 So, it's simple. To get the value of bit 1, I just need to perform a bit
 wise `and` between `sysrq` with `2`. The value of bit 2 is an `and`
 between `sysrq` and `4`, and so on. I wrote 3 versions that uses this
-method which are almost the same.
+method which are almost the same. The code of the function uses a list
+comprehension:
+```haskell
+decodeSysRq :: Int -> [String]
+decodeSysRq sysrq
+  | sysrq == 1 = values authorizations
+  | otherwise  = [auth
+                 |(key, auth) <- authorizations
+                 ,sysrq .&. key /= 0
+                 ]
+```
