@@ -28,7 +28,7 @@ field. The information is coded with 9 bits. The meaning is as follow:
 For other value it's a bit more complex. It depends on value of bits
 from 1 to 8, they are described as power of two, from kernel
 documentation:
-| power of 2  |             What SysRq commands are allow             |
+| power of 2  |            What SysRq commands are allows             |
 |-------------|:-----------------------------------------------------:|
 | 2 =   0x2   |        enable control of console logging level        |
 | 4 =   0x4   |        enable control of keyboard (SAK, unraw)        |
@@ -47,7 +47,7 @@ value from the table above beginning with greater one. So I began with
 allowed to a list of authorizations. Then continue with `128` and so on.
 Hence I used a `foldr`. I can't stop thinking in term of fold… at some
 point maybe I need to begin a therapy coding more in imperative
-language… `</joke>`. I let this code in the `decodeSysRq'''` function.
+language… `</joke>`.
 
 
 At the end, I realized there even was a simpler way to get the value
@@ -71,9 +71,8 @@ authorizations =
 
 So, it's simple. To get the value of bit 1, I just need to perform a bit
 wise `and` between `sysrq` with `2`. The value of bit 2 is an `and`
-between `sysrq` and `4`, and so on. I wrote 3 versions that uses this
-method which are almost the same. The code of the function uses a list
-comprehension:
+between `sysrq` and `4`, and so on.
+The code of the function uses a list comprehension:
 ```haskell
 decodeSysRq :: Int -> [String]
 decodeSysRq sysrq
@@ -95,3 +94,25 @@ values :: [(Int, String)] -> [String]
 values = map snd
 ```
 That is, we are keeping the second element of each pair.
+
+
+The program accept some options
+
+- -h or -- help : get a help message
+- -c or --current-options : list what are current options with the
+  current value in the **sysrq** file.
+- -l or -- list-cmds : list all SysRq commands
+
+When no argument is supplied, that acts as with the option `-c`.
+
+I wrote a separate function to parse the command line `initProg` which
+yields `Either` a `ProgError` or an `Action`.
+
+`ProgError` is the type I use to report an error during initialization.
+Either, the **sysrq** file was not found, either there was an invalid
+option pass to the program or the content of the **sysrq** file was not
+an Int.
+
+`Action` is the type used to drive the program.
+Either we `decodeSysRq`, either we list all **SysRq** commands or we
+print the help page.
