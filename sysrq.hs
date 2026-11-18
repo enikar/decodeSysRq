@@ -7,14 +7,11 @@ import Text.Read (readMaybe)
 import Data.Foldable (traverse_)
 import Data.Bits ((.&.))
 import Data.Bool (bool)
-import Control.Monad (guard)
 
 -- A type to manage the different behaviours of our program.
 data Action = DecodeSysRq Int -- decode /proc/sys/kernel/sysrq
             | ListCommands    -- list all SysRq commands
             | Help            -- show help
-
-
 
 main :: IO ()
 main = initProg >>= either printError goOn
@@ -54,36 +51,6 @@ decodeSysRq sysrq
                  ,sysrq .&. key /= 0
                  ]
 
--- decode using the list monad rather list comprenhension.
-decodeSysRq' :: Int -> [String]
-decodeSysRq' sysrq
-  | sysrq == 1 = values authorizations
-  | otherwise  = do
-      (key, auth) <- authorizations
-      guard (sysrq .&. key /= 0)
-      pure auth
-
--- decode using filter and map.
-decodeSysRq'' :: Int -> [String]
-decodeSysRq'' sysrq
-  | sysrq == 1 = values authorizations
-  | otherwise  = values (filter isBitSet authorizations)
-    where
-      isBitSet (key, _) = sysrq .&. key /= 0
-
--- decode using our good old friend foldr ;-)
--- We proceed by subtraction begining with the greater values,
--- hence the use of foldr.
-decodeSysRq''' :: Int -> [String]
-decodeSysRq''' sysrq
-  | sysrq == 1 = values authorizations
-  | otherwise  = fst (foldr decode ([], sysrq) authorizations)
-
-    where
-      decode (key, auth) (auths, n)
-        | n >= key    = (auth:auths, n-key)
-        | otherwise   = (auths, n)
-
 -- Get rid of the keys of an association list.
 -- Just keep the values.
 values :: [(Int, String)] -> [String]
@@ -119,19 +86,9 @@ initProg = do
           | otherwise                     -> pure (Left (InvalidOption opt))
     xs  -> pure (Left (InvalidOption (unwords xs)))
 
-sysRqFile  :: String
+sysRqFile :: String
 sysRqFile = "/proc/sys/kernel/sysrq"
 
--- readSysRq :: IO (Either ProgError Action)
--- readSysRq = do
---   exists <- doesFileExist sysRqFile
---   if exists
---   then do
---        datas <- readFile' sysRqFile
---        pure (readInt datas)
---   else pure (Left (FileNotFound sysRqFile)) -- signal the file was not found.
-
--- A rewrite of readSysRq, it's better imho.
 readSysRq :: IO (Either ProgError Action)
 readSysRq = doesFileExist sysRqFile >>= bool notFound readData
   where
