@@ -12,9 +12,9 @@ I wrote the program in Haskell to practice a bit, but the main reason is
 I love Haskell despite of I feel difficult to think in Haskell.
 
 
-I wrote it as a real program with minimum dependencies (just **base** and
-**directory** packages are needed). Maybe at some point I'll choose to use
-**optparse-applicative** to manage the command line arguments.
+I wrote it as a real program with minimum dependencies (just **base**).
+Maybe at some point I'll choose to use **optparse-applicative** to
+manage the command line arguments.
 
 
 The code is essentially a wrapper around the `decodeSysRq` function.

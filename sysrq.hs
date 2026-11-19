@@ -2,11 +2,10 @@ module Main (main) where
 
 import System.IO (readFile')
 import System.Environment (getArgs, getProgName)
-import System.Directory (doesFileExist)
+import Control.Exception (try, IOException)
 import Text.Read (readMaybe)
 import Data.Foldable (traverse_)
 import Data.Bits ((.&.))
-import Data.Bool (bool)
 
 -- A type to manage the different behaviours of our program.
 data Action = DecodeSysRq Int -- decode /proc/sys/kernel/sysrq
@@ -60,11 +59,12 @@ values = map snd
 -- and when reading the file sysrq.
 data ProgError = NotAnInt String
                 |InvalidOption String
-                |FileNotFound String -- in case sysRqFile doesn't exist.
+                |FileError String -- in case sysRqFile doesn't exist.
+                                  -- or it cannot be read.
 
 instance Show ProgError where
   show (NotAnInt s)      = "readSysRq: It's not an Int: " <> s
-  show (FileNotFound s)  = "readSysRq: file not found: " <> s
+  show (FileError s)  =  s
   show (InvalidOption s) = "initProg: invalid option: `"
                            <> s
                            <> "'. Try -h for help."
@@ -90,10 +90,10 @@ sysRqFile :: String
 sysRqFile = "/proc/sys/kernel/sysrq"
 
 readSysRq :: IO (Either ProgError Action)
-readSysRq = doesFileExist sysRqFile >>= bool notFound readData
+readSysRq = either fileError readInt <$> try (readFile' sysRqFile)
   where
-    notFound = pure (Left (FileNotFound sysRqFile))
-    readData = readInt <$> readFile' sysRqFile
+    fileError :: IOException -> Either ProgError Action
+    fileError e = Left (FileError (show e ))
 
 readInt :: String -> Either ProgError Action
 readInt s = maybe (Left (NotAnInt s)) -- signal that s doesn't match an Int.
