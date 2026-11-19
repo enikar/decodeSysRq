@@ -16,7 +16,7 @@ data Action = DecodeSysRq Int -- decode /proc/sys/kernel/sysrq
             | Help            -- show help
 
 main :: IO ()
-main = initProg >>= either printError goOn
+main = either printError goOn =<< initProg
   where
     printError e = hPutStrLn stderr ("Error: " <> show e)
 
@@ -94,9 +94,9 @@ sysRqFile = "/proc/sys/kernel/sysrq"
 
 readSysRq :: IO (Either ProgError Action)
 readSysRq = either ioErr readInt <$> try (readFile' sysRqFile)
-  where
-    ioErr :: IOError -> Either ProgError Action
-    ioErr = Left . IOErr . show
+
+ioErr :: IOError -> Either ProgError Action
+ioErr = Left . IOErr . show
 
 readInt :: String -> Either ProgError Action
 readInt s = maybe (Left (NotAnInt s)) -- signal that s doesn't match an Int.
